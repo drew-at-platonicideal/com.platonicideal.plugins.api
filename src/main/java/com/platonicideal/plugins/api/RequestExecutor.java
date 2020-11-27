@@ -24,7 +24,13 @@ public class RequestExecutor {
     public <ResponseType> ResponseType execute(HttpUriRequestBase request, Function<String, ResponseType> mappingFunction) {
         try (CloseableHttpClient client = clientSupplier.get()) {
             try (CloseableHttpResponse response = client.execute(request)) {
-                return contentExtractor.andThen(mappingFunction).apply(response);
+                int code = response.getCode();
+                String reason = response.getReasonPhrase();
+                String content = contentExtractor.apply(response);
+                if(code < 200 || code >= 300) {
+                    throw new IllegalStateException("Did not receive success response from client; code: " + code + ", body: " + reason + ", content: " + content);
+                }
+                return mappingFunction.apply(content);
             }
         } catch (IOException ex) {
             throw new IllegalStateException(

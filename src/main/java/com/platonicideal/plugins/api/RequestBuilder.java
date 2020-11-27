@@ -15,6 +15,10 @@ public class RequestBuilder {
     private final Map<String, String> headers;
     private final Map<String, String> parameters;
 
+    private RequestBuilder(String host, RequestMethod method) {
+        this(host, method, new HashMap<>(), new HashMap<>());
+    }
+    
     private RequestBuilder(String host, RequestMethod method, Map<String, String> headers,
             Map<String, String> parameters) {
         this.url = host;
@@ -24,7 +28,11 @@ public class RequestBuilder {
     }
 
     public static RequestBuilder get(String url) {
-        return new RequestBuilder(url, RequestMethod.GET, new HashMap<>(), new HashMap<>());
+        return new RequestBuilder(url, RequestMethod.GET);
+    }
+    
+    public static RequestBuilder post(String url) {
+        return new RequestBuilder(url, RequestMethod.POST);
     }
 
     public RequestBuilder withParameter(String key, String value) {
