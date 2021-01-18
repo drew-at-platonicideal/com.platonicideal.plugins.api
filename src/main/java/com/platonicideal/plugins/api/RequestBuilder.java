@@ -71,7 +71,9 @@ public class RequestBuilder {
 
     public HttpUriRequestBase build() {
         HttpUriRequestBase request = method.request(url());
-        request.setEntity(new StringEntity(entity, contentType));
+        if(entity != null) {
+            request.setEntity(new StringEntity(entity, contentType));
+        }
         headers.forEach((k, v) -> request.addHeader(k, v));
         return request;
     }

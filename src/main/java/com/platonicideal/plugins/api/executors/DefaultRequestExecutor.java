@@ -34,7 +34,11 @@ public class DefaultRequestExecutor implements RequestExecutor {
              CloseableHttpResponse httpResponse = client.execute(request)) {
                 Response response = Response.buildFrom(httpResponse, contentExtractor);
                 LOG.debug("Response was {} ({}) for {}", response.getCode(), response.getReason(), display(request));
-                LOG.trace("Response content {}", response.getContent());
+                if(!response.isSuccessful()) {
+                    LOG.error("Error Response body: {}", response.getContent());
+                } else {
+                    LOG.trace("Response content {}", response.getContent());
+                }
                 return response;
         } catch (IOException ex) {
             throw new IllegalStateException(
