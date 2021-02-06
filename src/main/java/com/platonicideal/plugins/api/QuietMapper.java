@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -17,6 +18,24 @@ public class QuietMapper {
 
     public QuietMapper(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+    
+    public <Type> Type readValueFromString(String value, Class<Type> valueType) {
+        try {
+            return mapper.readValue(value, valueType);
+        } catch(JsonProcessingException e) {
+            LOG.error("An error occured deserializing {}", ReflectionToStringBuilder.toString(value));
+            throw new IllegalStateException("Serialization failed", e);
+        }
+    }
+    
+    public <Type> Type readValueFromString(String value, TypeReference<Type> valueTypeReference) {
+        try {
+            return mapper.readValue(value, valueTypeReference);
+        } catch(JsonProcessingException e) {
+            LOG.error("An error occured deserializing {}", ReflectionToStringBuilder.toString(value));
+            throw new IllegalStateException("Serialization failed", e);
+        }
     }
     
     public String writeValueAsString(Object value) {

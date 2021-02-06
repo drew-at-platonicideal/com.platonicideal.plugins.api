@@ -47,6 +47,10 @@ public class RequestBuilder {
         return new RequestBuilder(url, RequestMethod.POST);
     }
 
+    public static RequestBuilder delete(String url) {
+        return new RequestBuilder(url, RequestMethod.DELETE);
+    }
+    
     public RequestBuilder withParameter(String key, String value) {
         return new RequestBuilder(url, method, headers, cloneWith(parameters, key, value), entity, contentType);
     }

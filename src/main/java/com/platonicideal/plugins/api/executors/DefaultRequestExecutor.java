@@ -29,11 +29,11 @@ public class DefaultRequestExecutor implements RequestExecutor {
     }
 
     public Response execute(HttpUriRequestBase request) {
-        LOG.trace("Executing {}", display(request));
+        LOG.trace("Executing {} {}", request.getMethod(), request.getPath());
         try (CloseableHttpClient client = clientSupplier.get();
              CloseableHttpResponse httpResponse = client.execute(request)) {
                 Response response = Response.buildFrom(httpResponse, contentExtractor);
-                LOG.debug("Response was {} ({}) for {}", response.getCode(), response.getReason(), display(request));
+                LOG.debug("Response was {} ({}) for {} {}", response.getCode(), response.getReason(), request.getMethod(), request.getPath());
                 if(!response.isSuccessful()) {
                     LOG.error("Error Response body: {}", response.getContent());
                 } else {
@@ -42,12 +42,7 @@ public class DefaultRequestExecutor implements RequestExecutor {
                 return response;
         } catch (IOException ex) {
             throw new IllegalStateException(
-                    "Failed during the execution of " + display(request), ex);
+                    "Failed during the execution of " + request.getMethod() + " " + request.getPath(), ex);
         }
     }
-    
-    private String display(HttpUriRequestBase request) {
-        return request.getMethod() + " " + request.getPath();
-    }
-
 }
