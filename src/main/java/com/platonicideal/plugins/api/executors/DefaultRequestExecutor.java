@@ -1,6 +1,7 @@
 package com.platonicideal.plugins.api.executors;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.platonicideal.plugins.api.ClientSupplier;
 import com.platonicideal.plugins.api.Response;
 import com.platonicideal.plugins.api.ResponseContentExtractor;
 
@@ -19,11 +19,11 @@ public class DefaultRequestExecutor implements RequestExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRequestExecutor.class);
     
-    private final ClientSupplier clientSupplier;
+    private final Supplier<CloseableHttpClient> clientSupplier;
     private final ResponseContentExtractor contentExtractor;
 
     @Autowired
-    public DefaultRequestExecutor(ClientSupplier clientSupplier, ResponseContentExtractor contentExtractor) {
+    public DefaultRequestExecutor(Supplier<CloseableHttpClient> clientSupplier, ResponseContentExtractor contentExtractor) {
         this.clientSupplier = clientSupplier;
         this.contentExtractor = contentExtractor;
     }

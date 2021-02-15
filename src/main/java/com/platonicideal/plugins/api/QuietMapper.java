@@ -3,6 +3,7 @@ package com.platonicideal.plugins.api;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +17,7 @@ public class QuietMapper {
     
     private final ObjectMapper mapper;
 
+    @Autowired
     public QuietMapper(ObjectMapper mapper) {
         this.mapper = mapper;
     }
