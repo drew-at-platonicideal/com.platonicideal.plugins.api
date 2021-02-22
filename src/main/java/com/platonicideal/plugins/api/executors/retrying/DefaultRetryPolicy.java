@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.platonicideal.plugins.api.QuietSleeper;
+import com.platonicideal.utils.QuietSleeper;
 
 @Service
 public class DefaultRetryPolicy implements RetryPolicy {

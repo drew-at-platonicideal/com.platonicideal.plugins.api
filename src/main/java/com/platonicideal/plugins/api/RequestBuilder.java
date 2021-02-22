@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +56,13 @@ public class RequestBuilder {
         return new RequestBuilder(url, RequestMethod.DELETE);
     }
     
+    public RequestBuilder withParameter(String key, Optional<String> value) {
+        if(value.isPresent()) {
+            return withParameter(key, value.get());
+        }
+        return this;
+    }
+    
     public RequestBuilder withParameter(String key, String value) {
         return new RequestBuilder(url, method, headers, cloneWith(parameters, key, value), entity, contentType);
     }
@@ -82,8 +90,9 @@ public class RequestBuilder {
         if(entity != null) {
             request.setEntity(new StringEntity(entity, contentType));
         }
-        LOG.info("curl --location --request {} '{}' --data-raw '{}'", request.getMethod(), url(), (StringUtils.isNotBlank(entity) ? entity : ""));
+        LOG.info("curl --location --request {} '{}'", request.getMethod(), url(), (StringUtils.isNotBlank(entity) ? "--data-raw '" + entity + "'" : ""));
         headers.forEach((k, v) -> request.addHeader(k, v));
+        
         return request;
     }
     

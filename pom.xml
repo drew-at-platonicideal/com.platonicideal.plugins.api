@@ -18,9 +18,10 @@
         <com.fasterxml.woodstox-woodstox-core.version>5.1.0</com.fasterxml.woodstox-woodstox-core.version>
         <commons-io.version>2.6</commons-io.version>
         <org.apache.commons-commons-lang3.version>3.10</org.apache.commons-commons-lang3.version>
-        <org.apache.httpcomponents.client5-httpclient5.version>5.0.1</org.apache.httpcomponents.client5-httpclient5.version>
-        <org.apache.httpcomponents.client5-httpclient5-fluent.version>5.0.1</org.apache.httpcomponents.client5-httpclient5-fluent.version>
+        <org.apache.httpcomponents.client5-httpclient5.version>5.0.3</org.apache.httpcomponents.client5-httpclient5.version>
+        <org.apache.httpcomponents.client5-httpclient5-fluent.version>5.0.3</org.apache.httpcomponents.client5-httpclient5-fluent.version>
         <org.apache.maven.plugins.maven-assembly-plugin.version>3.2.0</org.apache.maven.plugins.maven-assembly-plugin.version>
+        <com.platonicideal.utils.common-services.version>0.0.1-SNAPSHOT</com.platonicideal.utils.common-services.version>
     </properties>
 
     <dependencies>
@@ -44,6 +45,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${org.apache.commons-commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.platonicideal.utils</groupId>
+            <artifactId>common-services</artifactId>
+            <version>${com.platonicideal.utils.common-services.version}</version>
         </dependency>
 
         <dependency>
