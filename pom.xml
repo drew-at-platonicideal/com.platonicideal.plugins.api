@@ -25,7 +25,7 @@
     </properties>
 
     <dependencies>
-            <dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${com.fasterxml.jackson.dataformat-jackson-dataformat-xml.version}</version>
@@ -35,7 +35,7 @@
             <artifactId>woodstox-core</artifactId>
             <version>${com.fasterxml.woodstox-woodstox-core.version}</version>
         </dependency>
-    
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
