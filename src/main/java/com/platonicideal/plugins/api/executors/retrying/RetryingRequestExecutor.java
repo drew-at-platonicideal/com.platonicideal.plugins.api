@@ -31,7 +31,7 @@ public class RetryingRequestExecutor implements RequestExecutor {
             if(response.isSuccessful()) {
                 return response;
             }
-            retryPolicy.apply(attempts);
+            retryPolicy.apply(attempts, response);
         }
     }
     

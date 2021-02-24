@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.platonicideal.plugins.api.Response;
 import com.platonicideal.utils.QuietSleeper;
 
 @Service
@@ -21,10 +22,11 @@ public class DefaultRetryPolicy implements RetryPolicy {
         this.sleeper = sleeper;
     }
     
-    public void apply(int attempts) {
+    public void apply(int attempts, Response ignored) {
         LOG.debug("Retry attempt {} of {}", attempts, MAX);
         if(attempts < MAX) {
-            sleeper.sleep(1, TimeUnit.MINUTES);
+            LOG.info("Trying again in {}m", attempts);
+            sleeper.sleep(attempts, TimeUnit.MINUTES);
         } else {
             throw new IllegalArgumentException("Maximum number of retries exceeded");
         }
