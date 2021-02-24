@@ -4,12 +4,14 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.platonicideal.plugins.api.Response;
 import com.platonicideal.utils.QuietSleeper;
 
 @Service
+@Primary
 public class DefaultRetryPolicy implements RetryPolicy {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRetryPolicy.class);
