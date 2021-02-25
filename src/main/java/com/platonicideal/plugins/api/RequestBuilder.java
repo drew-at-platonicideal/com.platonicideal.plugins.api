@@ -14,13 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class RequestBuilder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RequestBuilder.class);
-    
     private static final Charset ENCODING = StandardCharsets.UTF_8;
     
     private final String url;
@@ -91,11 +87,6 @@ public class RequestBuilder {
         if(entity != null) {
             request.setEntity(new StringEntity(entity, contentType));
         }
-        String curlHeaders = StringUtils.join(headers.entrySet().stream().map((entry) -> "-H \"" + entry.getKey() + ": " + entry.getValue() + "\"").collect(Collectors.toList()), " ");
-        String curlEntity = StringUtils.isNotBlank(entity) ? "--data-raw '" + entity + "'" : "";
-        
-        LOG.info("curl --location {} --request {} '{}' {}", curlHeaders, request.getMethod(), url(), curlEntity);
-        
         return request;
     }
     

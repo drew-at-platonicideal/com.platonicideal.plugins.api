@@ -21,15 +21,18 @@ public class DefaultRequestExecutor implements RequestExecutor {
     
     private final Supplier<CloseableHttpClient> clientSupplier;
     private final ResponseContentExtractor contentExtractor;
+    private final CurlDisplayer curlDisplayer;
 
     @Autowired
-    public DefaultRequestExecutor(Supplier<CloseableHttpClient> clientSupplier, ResponseContentExtractor contentExtractor) {
+    public DefaultRequestExecutor(Supplier<CloseableHttpClient> clientSupplier, ResponseContentExtractor contentExtractor, CurlDisplayer curlDisplayer) {
         this.clientSupplier = clientSupplier;
         this.contentExtractor = contentExtractor;
+        this.curlDisplayer = curlDisplayer;
     }
 
     public Response execute(HttpUriRequestBase request) {
-        LOG.trace("Executing {} {}", request.getMethod(), request.getPath());
+        LOG.debug("Executing {}", curlDisplayer.getCurlFor(request));
+        
         try (CloseableHttpClient client = clientSupplier.get();
              CloseableHttpResponse httpResponse = client.execute(request)) {
                 Response response = Response.buildFrom(httpResponse, contentExtractor);
