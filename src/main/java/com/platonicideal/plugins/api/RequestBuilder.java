@@ -87,11 +87,14 @@ public class RequestBuilder {
 
     public HttpUriRequestBase build() {
         HttpUriRequestBase request = method.request(url());
+        headers.forEach((k, v) -> request.addHeader(k, v));
         if(entity != null) {
             request.setEntity(new StringEntity(entity, contentType));
         }
-        LOG.info("curl --location --request {} '{}'", request.getMethod(), url(), (StringUtils.isNotBlank(entity) ? "--data-raw '" + entity + "'" : ""));
-        headers.forEach((k, v) -> request.addHeader(k, v));
+        String curlHeaders = StringUtils.join(headers.entrySet().stream().map((entry) -> "-H \"" + entry.getKey() + ": " + entry.getValue() + "\"").collect(Collectors.toList()), " ");
+        String curlEntity = StringUtils.isNotBlank(entity) ? "--data-raw '" + entity + "'" : "";
+        
+        LOG.info("curl --location {} --request {} '{}' {}", curlHeaders, request.getMethod(), url(), curlEntity);
         
         return request;
     }
