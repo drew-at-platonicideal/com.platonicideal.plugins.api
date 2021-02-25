@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +25,7 @@ public class CurlDisplayer {
     public String getCurlFor(HttpUriRequestBase request) {
         String method = request.getMethod();
         String uri = getUri(request);
-        String headers = StringUtils.join(Arrays.asList(request.getHeaders()).stream().map(h -> "-H \"" + h.getName() + ": " + h.getValue() + "\""), " ");
+        String headers = StringUtils.join(Arrays.asList(request.getHeaders()).stream().map(h -> "-H \"" + h.getName() + ": " + h.getValue() + "\"").collect(Collectors.toList()), " ");
         String entityContent = getEntity(request);
         return "curl --location " + headers + " --request " + method + " '" + uri + "' " + entityContent;
     }
