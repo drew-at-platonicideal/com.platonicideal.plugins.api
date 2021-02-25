@@ -33,14 +33,16 @@ public class DefaultRequestExecutor implements RequestExecutor {
     public Response execute(HttpUriRequestBase request) {
         LOG.debug("Executing {}", curlDisplayer.getCurlFor(request));
         
+        long start = System.currentTimeMillis();
         try (CloseableHttpClient client = clientSupplier.get();
              CloseableHttpResponse httpResponse = client.execute(request)) {
+            long duration = System.currentTimeMillis() - start;
                 Response response = Response.buildFrom(httpResponse, contentExtractor);
-                LOG.debug("Response was {} ({}) for {} {}", response.getCode(), response.getReason(), request.getMethod(), request.getPath());
+                LOG.debug("Response was {} ({}) for {} {} in {}ms", response.getCode(), response.getReason(), request.getMethod(), request.getPath(), duration);
                 if(!response.isSuccessful()) {
                     LOG.error("Error Response body: {}", response.getContent());
                 } else {
-                    LOG.trace("Response content {}", response.getContent());
+                    LOG.debug("Response content {}", response.getContent());
                 }
                 return response;
         } catch (IOException ex) {
