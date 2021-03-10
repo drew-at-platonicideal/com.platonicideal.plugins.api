@@ -34,7 +34,7 @@ public class CurlDisplayer {
         try {
             return request.getUri().toASCIIString();
         } catch (URISyntaxException e) {
-            LOG.info("Error occured attempting to get uri from request", e);
+            LOG.error("Error occured attempting to get uri from request", e);
             return "";
         }
     }
@@ -52,7 +52,7 @@ public class CurlDisplayer {
                 return "--data-raw '" + entityContent + "'";
             }
         } catch (IOException e) {
-            LOG.info("Error occured attempting to get entity from request", e);
+            LOG.error("Error occured attempting to get entity from request", e);
             return "";
         }
     }

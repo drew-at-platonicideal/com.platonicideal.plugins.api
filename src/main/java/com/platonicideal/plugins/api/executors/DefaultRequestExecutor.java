@@ -42,7 +42,7 @@ public class DefaultRequestExecutor implements RequestExecutor {
                 if(!response.isSuccessful()) {
                     LOG.error("Error Response body: {}", response.getContent());
                 } else {
-                    LOG.debug("Response content {}", response.getContent());
+                    LOG.trace("Response content {}", response.getContent());
                 }
                 return response;
         } catch (IOException ex) {
