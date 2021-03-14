@@ -17,7 +17,6 @@ public class DefaultRequestExecutor implements RequestExecutor {
     private CallableRequest.Factory callableRequestFactory;
     private ExecutorService executor;
 
-
     @Autowired
     public DefaultRequestExecutor(CallableRequest.Factory callableRequestFactory) {
         this.callableRequestFactory = callableRequestFactory;
