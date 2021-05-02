@@ -52,9 +52,9 @@ public class RequestBuilder {
         return new RequestBuilder(url, RequestMethod.DELETE);
     }
     
-    public RequestBuilder withParameter(String key, Optional<String> value) {
+    public RequestBuilder withParameter(String key, Optional<?> value) {
         if(value.isPresent()) {
-            return withParameter(key, value.get());
+            return withParameter(key, value.get().toString());
         }
         return this;
     }
