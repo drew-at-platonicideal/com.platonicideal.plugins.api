@@ -41,8 +41,6 @@ public class DefaultRequestExecutor implements RequestExecutor {
                     request.getMethod(), request.getPath(), duration);
             if (!response.isSuccessful()) {
                 LOG.error("Error Response body: {}", response.getContent());
-            } else {
-                LOG.trace("Response content {}", response.getContent());
             }
             return response;
         } catch (IOException ex) {
