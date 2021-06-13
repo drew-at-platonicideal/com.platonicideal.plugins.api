@@ -9,11 +9,13 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.platonicideal.plugins.api.Response;
 import com.platonicideal.plugins.api.ResponseContentExtractor;
 
+@Primary
 @Service
 public class DefaultRequestExecutor implements RequestExecutor {
 

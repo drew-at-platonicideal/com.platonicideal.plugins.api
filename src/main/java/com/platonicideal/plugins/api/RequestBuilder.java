@@ -63,6 +63,10 @@ public class RequestBuilder {
         return new RequestBuilder(url, method, headers, cloneWith(parameters, key, value), entity, contentType);
     }
     
+	public RequestBuilder withParameter(String key, int value) {
+		return new RequestBuilder(url, method, headers, cloneWith(parameters, key, String.valueOf(value)), entity, contentType);
+	}
+    
     public RequestBuilder withHeader(String key, String value) {
         return new RequestBuilder(url, method, cloneWith(headers, key, value), parameters, entity, contentType);
     }
