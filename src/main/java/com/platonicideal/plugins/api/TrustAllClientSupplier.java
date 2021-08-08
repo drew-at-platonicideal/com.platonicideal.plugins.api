@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
@@ -34,6 +36,14 @@ public class TrustAllClientSupplier implements Supplier<CloseableHttpClient> {
             SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(new TrustAllStrategy()).build();
             SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create().setSslContext(sslContext).build();
             PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(sslSocketFactory).build();
+            
+            int timeout = 5;
+            RequestConfig config = RequestConfig.custom()
+            		.setConnectionRequestTimeout(timeout, TimeUnit.MINUTES)
+            		.setConnectTimeout(timeout, TimeUnit.MINUTES)
+            		.setResponseTimeout(timeout, TimeUnit.MINUTES)
+            		.build();
+            
             return HttpClients.custom().addRequestInterceptorLast(new HttpRequestInterceptor() {
                 @Override
                 public void process(HttpRequest request, EntityDetails entity, HttpContext context)
@@ -43,6 +53,7 @@ public class TrustAllClientSupplier implements Supplier<CloseableHttpClient> {
                     }
                 }
             }).setConnectionManager(connectionManager)
+            .setDefaultRequestConfig(config)
             .build();
         } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             throw new IllegalStateException("Could not create closable http client", e);
