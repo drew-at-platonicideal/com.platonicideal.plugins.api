@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
 
 public class RequestBuilder {
 
@@ -23,19 +25,21 @@ public class RequestBuilder {
     private final RequestMethod method;
     private final Map<String, String> headers;
     private final Map<String, String> parameters;
+    private final Map<String, String> formValues;
     private final String entity;
     private final ContentType contentType;
 
     private RequestBuilder(String host, RequestMethod method) {
-        this(host, method, new HashMap<>(), new HashMap<>(), null, null);
+        this(host, method, new HashMap<>(), new HashMap<>(), new HashMap<>(), null, null);
     }
     
     private RequestBuilder(String host, RequestMethod method, Map<String, String> headers,
-            Map<String, String> parameters, String entity, ContentType contentType) {
+            Map<String, String> parameters, Map<String, String> formValues, String entity, ContentType contentType) {
         this.url = host;
         this.method = method;
         this.headers = headers;
         this.parameters = parameters;
+		this.formValues = formValues;
         this.entity = entity;
         this.contentType = contentType;
     }
@@ -60,15 +64,19 @@ public class RequestBuilder {
     }
     
     public RequestBuilder withParameter(String key, String value) {
-        return new RequestBuilder(url, method, headers, cloneWith(parameters, key, value), entity, contentType);
+        return new RequestBuilder(url, method, headers, cloneWith(parameters, key, value), formValues, entity, contentType);
     }
     
 	public RequestBuilder withParameter(String key, int value) {
-		return new RequestBuilder(url, method, headers, cloneWith(parameters, key, String.valueOf(value)), entity, contentType);
+		return new RequestBuilder(url, method, headers, cloneWith(parameters, key, String.valueOf(value)), formValues, entity, contentType);
+	}
+	
+	public RequestBuilder withFormValue(String key, String value) {
+		return new RequestBuilder(url, method, headers, parameters, cloneWith(formValues, key, String.valueOf(value)), entity, contentType);
 	}
     
     public RequestBuilder withHeader(String key, String value) {
-        return new RequestBuilder(url, method, cloneWith(headers, key, value), parameters, entity, contentType);
+        return new RequestBuilder(url, method, cloneWith(headers, key, value), parameters, formValues, entity, contentType);
     }
     
     private Map<String, String> cloneWith(Map<String, String> source, String key, String value) {
@@ -82,13 +90,15 @@ public class RequestBuilder {
     }
     
     public RequestBuilder withBody(String entity, ContentType contentType) {
-        return new RequestBuilder(url, method, headers, parameters, entity, contentType);
+        return new RequestBuilder(url, method, headers, parameters, formValues, entity, contentType);
     }
-
+    
     public HttpUriRequestBase build() {
         HttpUriRequestBase request = method.request(url());
         headers.forEach((k, v) -> request.addHeader(k, v));
-        if(entity != null) {
+        if(!formValues.isEmpty()) {
+        	request.setEntity(new UrlEncodedFormEntity(formValues.entrySet().stream().map(e -> new BasicNameValuePair(e.getKey(), e.getValue())).collect(Collectors.toList())));
+        } else if(entity != null) {
             request.setEntity(new StringEntity(entity, contentType));
         }
         return request;
