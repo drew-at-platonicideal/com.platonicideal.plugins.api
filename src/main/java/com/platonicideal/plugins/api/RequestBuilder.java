@@ -74,6 +74,13 @@ public class RequestBuilder {
 	public RequestBuilder withFormValue(String key, String value) {
 		return new RequestBuilder(url, method, headers, parameters, cloneWith(formValues, key, String.valueOf(value)), entity, contentType);
 	}
+	
+	public RequestBuilder withFormValue(String key, Optional<String> value) {
+		if(value.isPresent()) {
+			return new RequestBuilder(url, method, headers, parameters, cloneWith(formValues, key, String.valueOf(value.get())), entity, contentType);
+		}
+		return new RequestBuilder(url, method, headers, parameters, formValues, entity, contentType);
+	}
     
     public RequestBuilder withHeader(String key, String value) {
         return new RequestBuilder(url, method, cloneWith(headers, key, value), parameters, formValues, entity, contentType);
