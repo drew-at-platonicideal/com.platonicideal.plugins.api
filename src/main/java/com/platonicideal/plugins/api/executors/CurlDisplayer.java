@@ -27,7 +27,7 @@ public class CurlDisplayer {
         String uri = getUri(request);
         String headers = StringUtils.join(Arrays.asList(request.getHeaders()).stream().map(h -> "-H \"" + h.getName() + ": " + h.getValue() + "\"").collect(Collectors.toList()), " ");
         String entityContent = getEntity(request);
-        return "curl --location " + headers + entityContent + " --request " + method + " '" + uri + "' ";
+        return "curl --location" + " " + headers + " " + entityContent + " " + "--request " + method + " '" + uri + "'";
     }
 
     private String getUri(HttpUriRequestBase request) {
@@ -50,7 +50,7 @@ public class CurlDisplayer {
                 entityContent = entityContent.replaceAll("'", "'\\\\''");
                 ContentType contentType = ContentType.parse(entity.getContentType());
                 request.setEntity(new StringEntity(entityContent, contentType));
-                return " --data-raw '" + entityContent + "'";
+                return "--data-raw '" + entityContent + "'";
             }
         } catch (IOException e) {
             LOG.error("Error occured attempting to get entity from request", e);
