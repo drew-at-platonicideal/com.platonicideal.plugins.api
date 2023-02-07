@@ -17,25 +17,30 @@ public class CurlExecutor {
 	
 	public String execute(String curl) throws IOException, InterruptedException {
 		LOG.debug("Executing {}", curl);
-		String[] curlCommands = curl.split(" ");
-		ProcessBuilder pb = new ProcessBuilder(curlCommands);
-		pb.redirectErrorStream(true);
 		Process p = null;
     	try {
-    		p = pb.start();
+    		p = Runtime.getRuntime().exec(curl);
 			try(InputStream inputStream = p.getInputStream();
-                BufferedReader read = new BufferedReader(new InputStreamReader(inputStream));	) {
+                BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));	
+				InputStream errorStream = p.getErrorStream();
+				BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));	) {
 				StringBuilder sb = new StringBuilder();
-				read.lines()
+				inputReader.lines()
 					.forEach(line -> {
-						LOG.debug("curl>"+line);
-					     sb.append(line);
+						LOG.debug("curl >"+line);
+					    sb.append(line);
 					});
+				StringBuilder err = new StringBuilder();
+				errorReader.lines()
+				.forEach(line -> {
+					LOG.debug("curl 2>"+line);
+					err.append(line);
+				});
 				
 				boolean finish = p.waitFor(30, TimeUnit.SECONDS);
 				if(finish) {
 					int exitValue = p.exitValue();
-					return "exit: " + exitValue + ", result: " + sb.toString();
+					return "exit: " + exitValue + ", result: " + sb.toString() +", error: " + err.toString();
 				} else {
 					throw new IllegalStateException("Request did not finish sending within 30s");
 				}
