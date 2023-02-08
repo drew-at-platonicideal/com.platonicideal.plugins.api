@@ -8,39 +8,39 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CurlExecutor {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CurlExecutor.class);
+	private final CurlParser parser;
 	
+	@Autowired
+	public CurlExecutor(CurlParser parser) {
+		this.parser = parser;
+	}
+
 	public String execute(String curl) throws IOException, InterruptedException {
 		LOG.debug("Executing {}", curl);
 		Process p = null;
     	try {
-    		p = Runtime.getRuntime().exec(curl);
+    		p = new ProcessBuilder().command(parser.parse(curl)).redirectErrorStream(true).start();
 			try(InputStream inputStream = p.getInputStream();
-                BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));	
-				InputStream errorStream = p.getErrorStream();
-				BufferedReader errorReader = new BufferedReader(new InputStreamReader(errorStream));	) {
+                BufferedReader inputReader = new BufferedReader(new InputStreamReader(inputStream));) {
 				StringBuilder sb = new StringBuilder();
 				inputReader.lines()
 					.forEach(line -> {
 						LOG.debug("curl >"+line);
 					    sb.append(line);
 					});
-				StringBuilder err = new StringBuilder();
-				errorReader.lines()
-				.forEach(line -> {
-					LOG.debug("curl 2>"+line);
-					err.append(line);
-				});
 				
 				boolean finish = p.waitFor(30, TimeUnit.SECONDS);
 				if(finish) {
 					int exitValue = p.exitValue();
-					return "exit: " + exitValue + ", result: " + sb.toString() +", error: " + err.toString();
+					LOG.debug("exit: " + exitValue + ", result: " + sb.toString());
+					return sb.toString();
 				} else {
 					throw new IllegalStateException("Request did not finish sending within 30s");
 				}
