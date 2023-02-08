@@ -25,7 +25,7 @@ public class CurlDisplayer {
     public String getCurlFor(HttpUriRequestBase request) {
         String method = request.getMethod();
         String uri = getUri(request);
-        String headers = StringUtils.join(Arrays.asList(request.getHeaders()).stream().map(h -> "-H \"" + h.getName() + ": " + h.getValue() + "\"").collect(Collectors.toList()), " ");
+        String headers = StringUtils.join(Arrays.asList(request.getHeaders()).stream().map(h -> "-H \"" + h.getName() + ":" + h.getValue() + "\"").collect(Collectors.toList()), " ");
         String entityContent = getEntity(request);
         return "curl --location" + " " + headers + " " + entityContent + " " + "--request " + method + " '" + uri + "'";
     }
@@ -47,10 +47,10 @@ public class CurlDisplayer {
         try {
             try(InputStream is = entity.getContent()) {
                 String entityContent = IOUtils.toString(entity.getContent(), StandardCharsets.UTF_8);
-                //entityContent = entityContent.replaceAll("'", "'\\\\''");
+                String singleQuoteContent = entityContent.replaceAll("'", "'\\\\''");
                 ContentType contentType = ContentType.parse(entity.getContentType());
                 request.setEntity(new StringEntity(entityContent, contentType));
-                return "--data-raw '" + entityContent + "'";
+                return "--data-raw '" + singleQuoteContent + "'";
             }
         } catch (IOException e) {
             LOG.error("Error occured attempting to get entity from request", e);
