@@ -47,7 +47,7 @@ public class CurlDisplayer {
         try {
             try(InputStream is = entity.getContent()) {
                 String entityContent = IOUtils.toString(entity.getContent(), StandardCharsets.UTF_8);
-                entityContent = entityContent.replaceAll("'", "'\\\\''");
+                //entityContent = entityContent.replaceAll("'", "'\\\\''");
                 ContentType contentType = ContentType.parse(entity.getContentType());
                 request.setEntity(new StringEntity(entityContent, contentType));
                 return "--data-raw '" + entityContent + "'";
