@@ -4,11 +4,11 @@ import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 
 import com.platonicideal.plugins.api.Response;
 
-public class AccountThreadedRequestExecutor implements RequestExecutor {
+public class ThreadedRequestExecutor implements RequestExecutor {
 
     private final RequestExecutorPool pool;
 
-    public AccountThreadedRequestExecutor(RequestExecutorPool pool) {
+    public ThreadedRequestExecutor(RequestExecutorPool pool) {
         this.pool = pool;
     }
     
