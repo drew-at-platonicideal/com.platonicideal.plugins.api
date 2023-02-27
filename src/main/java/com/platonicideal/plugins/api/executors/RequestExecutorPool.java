@@ -15,7 +15,7 @@ import org.apache.hc.core5.http.ProtocolException;
 
 import com.platonicideal.plugins.api.Response;
 
-public abstract class RequestExecutorPool {
+public final class RequestExecutorPool {
 
 	private final int maxRequestsPerAccount;
 	private final String keyHeader;
@@ -29,7 +29,7 @@ public abstract class RequestExecutorPool {
 		this.keyHeader = keyHeader;
     }
     
-    public RequestExecutor getExecutorFor(HttpUriRequest request) {
+    public final RequestExecutor getExecutorFor(HttpUriRequest request) {
         try {
             Header apiKeyHeader = request.getHeader(keyHeader);
             String apiKey = apiKeyHeader != null ? apiKeyHeader.getValue() : "";
