@@ -59,6 +59,10 @@ public class RequestBuilder {
         return new RequestBuilder(url, RequestMethod.POST);
     }
 
+    public static RequestBuilder put(String url) {
+        return new RequestBuilder(url, RequestMethod.PUT);
+    }
+    
     public static RequestBuilder delete(String url) {
         return new RequestBuilder(url, RequestMethod.DELETE);
     }
