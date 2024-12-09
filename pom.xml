@@ -14,7 +14,7 @@
 
     <properties>
         <com.fasterxml.jackson.dataformat-jackson-dataformat-xml.version>2.10.2</com.fasterxml.jackson.dataformat-jackson-dataformat-xml.version>
-        <com.fasterxml.woodstox-woodstox-core.version>5.1.0</com.fasterxml.woodstox-woodstox-core.version>
+        <com.fasterxml.woodstox-woodstox-core.version>5.4.0</com.fasterxml.woodstox-woodstox-core.version>
         <commons-io.version>2.9.0</commons-io.version>
         <org.apache.httpcomponents.client5-httpclient5.version>5.0.3</org.apache.httpcomponents.client5-httpclient5.version>
         <org.apache.httpcomponents.client5-httpclient5-fluent.version>5.0.3</org.apache.httpcomponents.client5-httpclient5-fluent.version>
